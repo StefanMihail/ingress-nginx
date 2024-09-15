@@ -1,0 +1,41 @@
+ingress-nginx:
+  enabled: true
+  controller:
+    service:
+      enabled: true
+
+    replicaCount: 1
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 150Mi
+
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 4
+      targetCPUUtilizationPercentage: 80
+      # targetMemoryUtilizationPercentage: 80
+
+    # Enable metrics scraping for the ingress-nginx controller. This configuration sets Prometheus annotations to allow scraping of metrics exposed by the ingress-nginx controller.
+    metrics:
+      enabled: true
+      service:
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"
+
+    # tolerations:
+    #   - key: "devops-tooling"
+    #     operator: "Exists"
+    #     effect: "NoSchedule"
+    # affinity:
+    #   nodeAffinity:
+    #     requiredDuringSchedulingIgnoredDuringExecution:
+    #       nodeSelectorTerms:
+    #         - matchExpressions:
+    #           - key: component
+    #             operator: In
+    #             values:
+    #             - monitoring
